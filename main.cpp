@@ -1,9 +1,11 @@
 //Gaspard Gentil
 
 #include <iostream>
+#include "graph.hpp"
 
 int main(int argc, char const *argv[])
 {
-    std::cout << "Hello world" << std::endl;
+    Graph test("img/baboon.ascii.pgm");
+    test.printGraph(0,0);
     return 0;
 }

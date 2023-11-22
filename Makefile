@@ -1,11 +1,14 @@
 #Gaspard Gentil
 
-main.exe : main.o
-	g++ -g main.o -omain.exe
+main.exe : obj/main.o
+	g++ -Wall -g -o bin/main.exe obj/main.o
+
+main.o : main.cpp
+	g++ -Wall -o obj/main.o main.cpp
 
 clean :
-	-rm *.o *~
+	-rm obj/*
 
 veryclean : clean 
-	-rm *.exe
+	-rm bin/* *~
 
