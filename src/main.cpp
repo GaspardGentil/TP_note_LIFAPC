@@ -5,9 +5,11 @@
 
 int main(int argc, char const *argv[])
 {
-    const char*file = "/img/baboon.ascii.pgm";
+    
+    std::string file = "./img/baboon.ascii.pgm";
     Graph test(file);
     test.printGraph(0,0);
     test.parcours(2,2);
+    std::cout << "main finished" << std::endl;
     return 0;
 }

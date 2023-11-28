@@ -9,10 +9,11 @@ Graph::Graph(){
     state = new int[0*0];
 }
 
-Graph::Graph(const char* filename){
+Graph::Graph(std::string filename){
+    std::cout << filename << std::endl;
     std::ifstream in(filename);
-    if (in.fail()){
-        std::cout << "error" << filename << "\n";
+    if (!in){
+        std::cerr << "error" << filename << std::endl << std::flush;
         exit(1);
     }
 

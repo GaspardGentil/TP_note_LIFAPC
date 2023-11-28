@@ -16,7 +16,7 @@ public :
 
     Graph();
 
-    Graph(const char* filename);
+    Graph(std::string filename);
 
     ~Graph();
 
