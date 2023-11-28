@@ -5,7 +5,9 @@
 
 int main(int argc, char const *argv[])
 {
-    Graph test("img/baboon.ascii.pgm");
+    const char*file = "img/baboon.ascii.pgm";
+    Graph test(file);
     test.printGraph(0,0);
+    test.parcours(2,2);
     return 0;
 }
