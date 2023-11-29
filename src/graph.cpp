@@ -10,41 +10,35 @@ Graph::Graph() : L(0), C(0), pixelValues(nullptr), pixelFlow(nullptr), pixelCapa
 }
 
 Graph::Graph(std::string filename) {
-    std::cout << filename << std::endl;
     std::ifstream in(filename);
     if (!in.is_open()) {
-        std::cerr << "Error: Unable to open file " << filename << std::endl;
-        exit(1);
+        throw std::runtime_error("Error: Unable to open file " + filename);
     }
 
     std::string magic;
     in >> magic;
     if (magic != "P2") {
-        std::cerr << "Error: Invalid magic number in file " << filename << std::endl;
         in.close();
-        exit(1);
+        throw std::runtime_error("Error: Invalid magic number in file " + filename);
     }
 
-    if (!(in >> L >> C)) {
-        L = 0;
-        C = 0;
-        std::cerr << "Error: Unable to read dimensions from file " << filename << std::endl;
+    if (!(in >> L >> C) || L <= 0 || C <= 0) {
         in.close();
-        exit(1);
+        throw std::runtime_error("Error: Invalid dimensions in file " + filename);
     }
 
     pixelValues = new int[L * C];
     for (int i = 0; i < L * C; i++) {
         if (!(in >> pixelValues[i])) {
-            std::cerr << "Error: Unable to read pixel value from file " << filename << std::endl;
-            delete[] pixelValues; // Clean up allocated memory
+            delete[] pixelValues;
             in.close();
-            exit(1);
+            throw std::runtime_error("Error: Unable to read pixel value from file " + filename);
         }
     }
 
     in.close();
 }
+
 
 Graph::~Graph() {
     delete[] pixelValues;
