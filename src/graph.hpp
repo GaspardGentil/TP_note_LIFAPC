@@ -6,15 +6,18 @@
 #include <iostream>
 #include <fstream>
 
+
 class Graph{
 private :
     int L,C;
-    int* tableau;
+    int* pixelValues;
+    int* pixelFlow;
+    int* pixelCapacity;
     int* state;
 
 public :
 
-    Graph();
+    Graph() : L(0), C(0), pixelValues(nullptr), state(nullptr) {}
 
     Graph(std::string filename);
 
@@ -39,4 +42,7 @@ public :
     void parcours(const int l,const int c);
 
     void printGraph(const int l,const int c);
+    
+    void displayGrid() const;
+    void saveToFile(std::string filename) const;
 };

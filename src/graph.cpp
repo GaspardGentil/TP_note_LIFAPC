@@ -2,46 +2,45 @@
 
 #include "graph.hpp"
 
-Graph::Graph(){
-    L = 0;
-    C = 0;
-    tableau = new int[0*0];
-    state = new int[0*0];
-}
-
-Graph::Graph(std::string filename){
+Graph::Graph(std::string filename) {
     std::cout << filename << std::endl;
     std::ifstream in(filename);
-    if (!in){
-        std::cerr << "error" << filename << std::endl << std::flush;
+    if (!in.is_open()) {
+        std::cerr << "Error: Unable to open file " << filename << std::endl;
         exit(1);
     }
 
     std::string magic;
     in >> magic;
-    if (magic != "P2"){
+    if (magic != "P2") {
+        std::cerr << "Error: Invalid magic number in file " << filename << std::endl;
         in.close();
         exit(1);
     }
-    // int lines, columns;
-    if (!(in >> L >> C)){
+
+    if (!(in >> L >> C)) {
         L = 0;
         C = 0;
+        std::cerr << "Error: Unable to read dimensions from file " << filename << std::endl;
         in.close();
         exit(1);
     }
-    tableau = new int[L * C];
 
-    for (int i = 0; i < L * C; i++){
-        if (!(in >> tableau[i])){
+    pixelValues = new int[L * C];
+    for (int i = 0; i < L * C; i++) {
+        if (!(in >> pixelValues[i])) {
+            std::cerr << "Error: Unable to read pixel value from file " << filename << std::endl;
+            delete[] pixelValues; // Clean up allocated memory
+            in.close();
             exit(1);
         }
     }
+
     in.close();
 }
 
 Graph::~Graph() {
-    delete[] tableau;
+    delete[] pixelValues;
     delete[] state;
 }
 
@@ -53,7 +52,7 @@ int Graph::pixel(const int l, const int c){
 int Graph::pixel(const int i){
     assert(i >= 0);
     assert(i < L * C);
-    return tableau[i];
+    return pixelValues[i];
 }
 
 int Graph::index(const int l, const int c){
@@ -126,7 +125,7 @@ void Graph::printGraph(const int l,const int c){
     int n = near(l, c, lines, columns);
 
     for (int v = 0; v < n; v++){
-        std::cout << tableau[i] << std::endl;
+        std::cout << pixelValues[i] << std::endl;
         parcours(lines[v], columns[v]);
     }
 }
