@@ -2,6 +2,13 @@
 
 #include "graph.hpp"
 
+Graph::Graph() : L(0), C(0), pixelValues(nullptr), pixelFlow(nullptr), pixelCapacity(nullptr) {
+    // Allocate memory for arrays
+    pixelValues = new int[L * C];
+    pixelFlow = new int[L * C];
+    pixelCapacity = new int[L * C];
+}
+
 Graph::Graph(std::string filename) {
     std::cout << filename << std::endl;
     std::ifstream in(filename);
@@ -41,10 +48,9 @@ Graph::Graph(std::string filename) {
 
 Graph::~Graph() {
     delete[] pixelValues;
-    delete[] state;
+    delete[] pixelFlow;
+    delete[] pixelCapacity;
 }
-
-
 
 int Graph::pixel(const int l, const int c){
     return pixel(index(l,c));
@@ -101,7 +107,7 @@ int Graph::near(const int l, const int c, int lines[4], int columns[4]){
     return n;
 }
 
-void Graph::parcours(const int l,const int c){
+void Graph::depthFT(const int l,const int c){
     int i = index(l, c);
     if (state[i] != 0) return;
     state[i] = 1;
@@ -111,7 +117,7 @@ void Graph::parcours(const int l,const int c){
     int n = near(l, c, lines, columns);
 
     for (int v = 0; v < n; v++){
-        parcours(lines[v], columns[v]);
+        depthFT(lines[v], columns[v]);
     }
 }
 
@@ -126,6 +132,6 @@ void Graph::printGraph(const int l,const int c){
 
     for (int v = 0; v < n; v++){
         std::cout << pixelValues[i] << std::endl;
-        parcours(lines[v], columns[v]);
+        printGraph(lines[v], columns[v]);
     }
 }

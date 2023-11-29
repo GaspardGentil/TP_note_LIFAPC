@@ -17,7 +17,7 @@ private :
 
 public :
 
-    Graph() : L(0), C(0), pixelValues(nullptr), state(nullptr) {}
+    Graph();
 
     Graph(std::string filename);
 
@@ -39,7 +39,7 @@ public :
 
     int near(const int l, const int c, int lines[4],int columns[4]);
 
-    void parcours(const int l,const int c);
+    void depthFT(const int l,const int c);
 
     void printGraph(const int l,const int c);
     
