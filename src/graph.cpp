@@ -21,8 +21,8 @@ Graph::Graph(std::string filename) {
         in.close();
         throw std::runtime_error("Error: Invalid magic number in file " + filename);
     }
-
-    if (!(in >> L >> C) || L <= 0 || C <= 0) {
+    
+    if (!(in >> L >> C)) {
         in.close();
         throw std::runtime_error("Error: Invalid dimensions in file " + filename);
     }
@@ -35,7 +35,6 @@ Graph::Graph(std::string filename) {
             throw std::runtime_error("Error: Unable to read pixel value from file " + filename);
         }
     }
-
     in.close();
 }
 
@@ -49,6 +48,7 @@ Graph::~Graph() {
 int Graph::pixel(const int l, const int c){
     return pixel(index(l,c));
 }
+
 int Graph::pixel(const int i){
     assert(i >= 0);
     assert(i < L * C);

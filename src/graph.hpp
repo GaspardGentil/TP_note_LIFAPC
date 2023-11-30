@@ -6,10 +6,10 @@
 #include <iostream>
 #include <fstream>
 
-
 class Graph{
 private :
     int L,C;
+    int S,P;
     int* pixelValues;
     int* pixelFlow;
     int* pixelCapacity;
