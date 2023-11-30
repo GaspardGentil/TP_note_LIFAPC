@@ -5,15 +5,12 @@
 #include <cassert>
 #include <iostream>
 #include <fstream>
+#include "pixel.hpp"
 
 class Graph{
 private :
     int L,C;
-    int S,P;
-    int* pixelValues;
-    int* pixelFlow;
-    int* pixelCapacity;
-    int* state;
+    Pixel* pixels;
 
 public :
 

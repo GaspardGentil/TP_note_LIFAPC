@@ -2,11 +2,8 @@
 
 #include "graph.hpp"
 
-Graph::Graph() : L(0), C(0), pixelValues(nullptr), pixelFlow(nullptr), pixelCapacity(nullptr) {
-    // Allocate memory for arrays
-    pixelValues = new int[L * C];
-    pixelFlow = new int[L * C];
-    pixelCapacity = new int[L * C];
+Graph::Graph() : L(0), C(0), pixels(nullptr) {
+    pixels = new Pixel[L * C];
 }
 
 Graph::Graph(std::string filename) {
@@ -27,22 +24,22 @@ Graph::Graph(std::string filename) {
         throw std::runtime_error("Error: Invalid dimensions in file " + filename);
     }
 
-    pixelValues = new int[L * C];
+    pixels = new Pixel[L * C];
+    int temp;
     for (int i = 0; i < L * C; i++) {
-        if (!(in >> pixelValues[i])) {
-            delete[] pixelValues;
+        if (!(in >> temp)) {
+            delete[] pixels;
             in.close();
             throw std::runtime_error("Error: Unable to read pixel value from file " + filename);
         }
+        pixels[i].setIntensity(temp);
     }
     in.close();
 }
 
 
 Graph::~Graph() {
-    delete[] pixelValues;
-    delete[] pixelFlow;
-    delete[] pixelCapacity;
+    delete[] pixels;
 }
 
 int Graph::pixel(const int l, const int c){
@@ -52,7 +49,7 @@ int Graph::pixel(const int l, const int c){
 int Graph::pixel(const int i){
     assert(i >= 0);
     assert(i < L * C);
-    return pixelValues[i];
+    return pixels[i].getIntensity();
 }
 
 int Graph::index(const int l, const int c){
@@ -103,8 +100,8 @@ int Graph::near(const int l, const int c, int lines[4], int columns[4]){
 
 void Graph::depthFT(const int l,const int c){
     int i = index(l, c);
-    if (state[i] != 0) return;
-    state[i] = 1;
+    if (pixels[i].getState() != 0) return;
+    pixels[i].setState(1);
 
     int lines[4];
     int columns[4];
@@ -117,15 +114,15 @@ void Graph::depthFT(const int l,const int c){
 
 void Graph::printGraph(const int l,const int c){
     int i = index(l, c);
-    if (state[i] != 0) return;
-    state[i] = 1;
+    if (pixels[i].getState() != 0) return;
+    pixels[i].setState(1);
 
     int lines[4];
     int columns[4];
     int n = near(l, c, lines, columns);
 
     for (int v = 0; v < n; v++){
-        std::cout << pixelValues[i] << std::endl;
+        std::cout << pixels[i].getIntensity() << std::endl;
         printGraph(lines[v], columns[v]);
     }
 }
