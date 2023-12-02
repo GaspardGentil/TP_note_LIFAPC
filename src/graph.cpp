@@ -112,6 +112,10 @@ void Graph::depthFT(const int l,const int c){
     }
 }
 
+void Graph::breadthFT(const int l, const int c){
+    
+}
+
 void Graph::printGraph(const int l,const int c){
     int i = index(l, c);
     if (pixels[i].getState() != 0) return;
