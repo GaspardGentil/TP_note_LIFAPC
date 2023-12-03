@@ -18,7 +18,7 @@ Every pixel is represented by its own intensity, state, capacity, flow and the n
 
 ## Traversal algorithms
 
-The Depth First Traversal is defined like this (in pseudocode) :
+- The Depth First Traversal is defined like this (in pseudocode) :
 
 Traversal(s)
     if state[s] == visited
@@ -28,7 +28,7 @@ Traversal(s)
         Traversal(v)
 
 
-The Breadth First Traversal is defined like this (in pseudocode) :
+- The Breadth First Traversal is defined like this (in pseudocode) :
 
 Traversal(s)
     queue Q
