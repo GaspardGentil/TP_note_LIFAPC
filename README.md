@@ -20,11 +20,11 @@ Every pixel is represented by its own intensity, state, capacity, flow and the n
 
 - The Depth First Traversal is defined like this (in pseudocode) :
 
-Traversal(s)
-    if state[s] == visited
-        finish
-    state[s] = visited   
-    for each neighbors v of s 
+Traversal(s)'\n'
+    if state[s] == visited\n
+        finish\n
+    state[s] = visited\n
+    for each neighbors v of s\n
         Traversal(v)
 
 
