@@ -1,6 +1,7 @@
 //Gaspard Gentil
 
 #include "graph.hpp"
+#include <queue>
 
 Graph::Graph() : L(0), C(0), pixels(nullptr) {
     pixels = new Pixel[L * C];
@@ -112,9 +113,41 @@ void Graph::depthFT(const int l,const int c){
     }
 }
 
-void Graph::breadthFT(const int l, const int c){
-    
+void Graph::breadthFT(const int startL, const int startC) {
+    // Initialize a queue for breadth-first traversal
+    std::queue<std::pair<int, int>> q;
+
+    q.push(std::make_pair(startL, startC));
+
+    while (!q.empty()) {
+        std::pair<int, int> current = q.front();
+        q.pop();
+
+        int l = current.first;
+        int c = current.second;
+        int i = index(l, c);
+
+        if (pixels[i].getState() != 0) {
+            continue;
+        }
+
+        pixels[i].setState(1);
+
+        int lines[4];
+        int columns[4];
+        int n = near(l, c, lines, columns);
+
+        for (int v = 0; v < n; v++) {
+            int neighborL = lines[v];
+            int neighborC = columns[v];
+
+            if (pixels[index(neighborL, neighborC)].getState() == 0) {
+                q.push(std::make_pair(neighborL, neighborC));
+            }
+        }
+    }
 }
+
 
 void Graph::printGraph(const int l,const int c){
     int i = index(l, c);

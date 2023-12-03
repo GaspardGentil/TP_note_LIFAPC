@@ -1,35 +1,49 @@
-# TP Noté de LIFAPC
+# LIFAPC TP
 
-## Contenu du TP
+## TP Content
 
 1. **Graph (image)**
-2. **Parcours de l'image (largeur et profondeur)**
-3. **Calcul du flot (binarisation de l'image)**
+2. **Traversal of image (DFT and BFT)**
+3. **Calculating flow  (image binarisation)**
 
-## Structures Utilisées
+## Used structures
 
 ### Graph
 
-Le graphe est représenté à l'aide d'une structure de tableau censé representer une grille
+The graph is represented by an array structure meant to be a matrix of pixels
 
 ### Pixel
 
-Chaque Pixel du graphe est caractérisé par son intensité et son état.
+Every pixel is represented by its own intensity, state, capacity, flow and the neighbors flow and capacity. The source and the sink flow and capacity is also stored in the pixel.
 
-## Algorithme de Parcours
+## Traversal algorithms
 
-L'algorithme de parcours en profondeur est défini comme suit (en pseudocode) :
+The Depth First Traversal is defined like this (in pseudocode) :
 
-parcours(s)
-    si etat[s] == visité
-        fini
-    etat[s] = visité   
-    pour chaque voisin v de s 
-        parcours(v)
+Traversal(s)
+    if state[s] == visited
+        finish
+    state[s] = visited   
+    for each neighbors v of s 
+        Traversal(v)
 
-## Relation entre Indice Global et Coordonnées
 
-La relation entre l'indice global `i` et les coordonnées `(l, c)` est donnée par les équations suivantes :
+The Breadth First Traversal is defined like this (in pseudocode) :
+
+Traversal(s)
+    queue Q
+    Q.push(s)
+    while Q != null
+        current = Q.pop()
+        if state[courant] == visited
+            state[courant] = visited
+        for neighbor v = current.neighbors()
+            if state[v] != visited
+                Q.push(v)
+
+## Relationship between Global Index and Coordinates
+
+The relationship between the global index `i` and the coordinates `(l, c)` is given by the following equations:
 
 i = l * C + c
 l = i / C
@@ -38,14 +52,11 @@ c = i % C
 ## TODO
 
 - Debug the graph constructor by file (segfault)
-- Breadth First Traversal function
 - Display the image (in ASCII)
 - Save the image in a file
 - Arc managing
 
-/***************************************/
-
-Binarisation
+- Binarisation
 
 ## How to use the code
 
