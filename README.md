@@ -60,9 +60,9 @@ c = i % C
 
 ## How to use the code
 
-- **Go into the parent directory (should be TP_note)**
+- **Go into the parent directory**
 - **Enter a Terminal and type "make"**
 - **the compilation of the source files should be done**
 - **execute the main executable "./bin/main"**
-- **if you need to recompile some file (after updates) just type make again**
+- **if you need to recompile some file (after file modification) just type make again**
 - **to clean the compiled file and the executable, simply type "make clean"**
