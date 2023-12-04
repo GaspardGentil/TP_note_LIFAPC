@@ -6,19 +6,24 @@
 class Pixel{
     private:
 
-    int intensity;
-    int flow[4];
-    int capacity[4];
-    int state;
-    int sourceFlow;
-    int sinkFlow;
-    int sourceCapacity;
-    int sinkCapacity;
+    int intensity; //intensity on the pixel (between 0 and 255)
+    int flow[4]; //store the flow of the 4 neighbors
+    int capacity[4]; //store the capacities of the 4 neighbors
+    int state; //state of the pixel (visited or not)
+    int sourceFlow; //flow of the source pixel
+    int sinkFlow; //flow of the sink pixel
+    int sourceCapacity; //capacity of the source pixel
+    int sinkCapacity; //capacity of the sink pixel
 
     public:
 
+    //default constructor
     Pixel() : intensity(0), flow(), capacity(), state(0), sourceFlow(0), sinkFlow(0), sourceCapacity(0), sinkCapacity(0) {}
-    Pixel(const int i);
+    Pixel(const int i); //constructor by value
+
+    /****************/
+    /*  Accessors   */
+    /****************/
 
     int getIntensity() const {return intensity;}
     void setIntensity(const int i) {intensity = i;}
