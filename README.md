@@ -4,7 +4,7 @@
 
 1. **Graph (image)**
 2. **Traversal of image (DFT and BFT)**
-3. **Calculating flow  (image binarisation)**
+3. **Calculating flow (image binarisation)**
 
 ## Used structures
 
@@ -12,9 +12,25 @@
 
 The graph is represented by an array structure meant to be a matrix of pixels
 
+- int L,C; //dimension of the image
+- Pixel S,T; //source (S) and sink (T)
+- Pixel* pixels; //array of pixels (representing the image)
+- augmentedPath; //augmented path for the flow updating
+
 ### Pixel
 
 Every pixel is represented by its own intensity, state, capacity, flow and the neighbors flow and capacity. The source and the sink flow and capacity is also stored in the pixel.
+
+Attributes :
+- int intensity
+- int state; 
+- int sourceFlow; 
+- int sinkFlow;
+- int sourceCapacity; 
+- int sinkCapacity;
+
+- int flow[4];
+- int capacity[4];
 
 ## Traversal algorithms
 
@@ -51,11 +67,11 @@ c = i % C
 
 ## TODO
 
-- Debug the graph constructor by file (segfault)
+- debug the bfsAugmentedPath function
 - Display the image (in ASCII)
 - Save the image in a file
-- Arc managing
 
+- Flow management with augmented path
 - Binarisation
 
 ## How to use the code
@@ -63,6 +79,6 @@ c = i % C
 - **Go into the parent directory**
 - **Enter a Terminal and type "make"**
 - **the compilation of the source files should be done**
-- **execute the main executable "./bin/main"**
+- **execute the main executable "./bin/main 'image_name'"**
 - **if you need to recompile some file (after file modification) just type make again**
 - **to clean the compiled file and the executable, simply type "make clean"**

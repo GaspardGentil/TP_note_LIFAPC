@@ -2,11 +2,12 @@
 
 #include "graph.hpp"
 #include <queue>
+#include <algorithm>
 
 Graph::Graph() : L(0), C(0) {
     pixels = new Pixel[L * C];
-    S->setIntensity(255);
-    T->setIntensity(0);
+    S.setIntensity(255);
+    T.setIntensity(0);
 }
 
 Graph::Graph(std::string filename) {
@@ -38,8 +39,8 @@ Graph::Graph(std::string filename) {
         pixels[i].setIntensity(temp);
     }
     in.close();
-    S->setIntensity(255);
-    T->setIntensity(0);
+    S.setIntensity(255);
+    T.setIntensity(0);
 }
 
 Graph::~Graph() {
@@ -191,43 +192,45 @@ void Graph::breadthFT(const int startL, const int startC) {
     }
 }
 
-bool Graph::findAugmentedPath() {
-    // Initialize the graph, assuming the initializeGraph function exists
-    initializeGraph();
+void Graph::bfsWithAugmentedPath() {
+    augmentedPath.clear();
+    std::queue<int> queue;
+    std::vector<bool> visited(L * C, false);
+    std::vector<int> predecessor(L * C, -1);
 
-    // Start BFS from source (S)
-    std::queue<Pixel*> bfsQueue;
-    bfsQueue.push(S);
+    visited[S.getState()] = true;
+    queue.push(S.getIntensity());
 
-    while (!bfsQueue.empty()) {
-        Pixel* currentPixel = bfsQueue.front();
-        bfsQueue.pop();
+    while (!queue.empty()) {
+        // Dequeue a pixel from the queue
+        int currentPixel = queue.front();
+        queue.pop();
 
-        // Check if the current pixel is the sink (T)
-        if (currentPixel == T) {
-            // Augmented path found, reconstruct the path
-            //reconstructAugmentedPath();
-            return true;
-        }
-
-        // Explore neighbors (pixels with residual capacity)
+        // Enqueue unvisited neighbors
         int lines[4];
         int columns[4];
-        int n = near(0,0, lines, columns);
+        int n = near(line(currentPixel), column(currentPixel), lines, columns);
 
         for (int v = 0; v < n; ++v) {
-            int neighborIndex = index(lines[v], columns[v]);
-            Pixel* neighbor = &pixels[neighborIndex];
+            int neighbor = index(lines[v], columns[v]);
 
-            if (neighbor->getState() == 0 && currentPixel->capacity[v] - neighbor->capacity[v] > 0) {
-                neighbor->setState(1);
-                bfsQueue.push(neighbor);
+            if (!visited[neighbor] && currentPixel, neighbor > 0) {
+                visited[neighbor] = true;
+                queue.push(neighbor);
+                predecessor[neighbor] = currentPixel;
             }
         }
     }
 
-    // No augmented path found
-    return false;
+    // Reconstruct the augmented path from sink to source using the predecessor array
+    int currentPixel = T.getIntensity();
+    while (currentPixel != -1) {
+        augmentedPath.push_back(&pixels[currentPixel]);
+        currentPixel = predecessor[currentPixel];
+    }
+
+    // Reverse the augmented path to have it from source to sink
+    std::reverse(augmentedPath.begin(), augmentedPath.end());
 }
 
 void Graph::printGraph(const int l,const int c){
@@ -243,4 +246,12 @@ void Graph::printGraph(const int l,const int c){
         std::cout << pixels[i].getIntensity() << std::endl;
         printGraph(lines[v], columns[v]);
     }
+}
+
+void Graph::displayGrid() const{
+    return;
+}
+
+void Graph::saveToFile(std::string filename) const{
+    return;
 }

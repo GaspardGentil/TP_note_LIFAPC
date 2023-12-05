@@ -22,9 +22,9 @@ class Pixel{
     Pixel() : intensity(0), state(0), sourceFlow(0), sinkFlow(0), sourceCapacity(0), sinkCapacity(0) {}
     Pixel(const int i); //constructor by value
 
-    /****************/
-    /*  Accessors   */
-    /****************/
+    /***********************/
+    /*      Accessors      */
+    /***********************/
 
     int getIntensity() const {return intensity;}
     void setIntensity(const int i) {intensity = i;}

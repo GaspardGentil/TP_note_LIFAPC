@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <vector>
 #include "pixel.hpp"
 
 #define ALPHA 0.5
@@ -15,10 +16,10 @@
 class Graph{
 private :
     int L,C; //dimension of the image
-    Pixel* S;
-    Pixel* T; //source (S) and sink (T)
+    Pixel S;
+    Pixel T; //source (S) and sink (T)
     Pixel* pixels; //array of pixels (representing the image)
-    Pixel* traversal;
+    std::vector<Pixel*> augmentedPath;
 
 public :
 
@@ -28,7 +29,8 @@ public :
 
     ~Graph(); //destructor
 
-    void initializeGraph();
+    //initialize the pixels flow and capacities following the formulas
+    void initializeGraph(); 
 
     //accessors
     int getL() const { return L; }
@@ -55,7 +57,10 @@ public :
     void depthFT(const int l,const int c);
     void breadthFT(const int l, const int c);
 
-    bool findAugmentedPath();
+    //Traversal to find the augmented path
+    void bfsWithAugmentedPath();
+    std::vector<Pixel*> getAugmentedPath() const 
+        {return augmentedPath;}
 
     void printGraph(const int l,const int c); //print the intensity in the array
     
