@@ -3,8 +3,10 @@
 #include "graph.hpp"
 #include <queue>
 
-Graph::Graph() : L(0), C(0), pixels(nullptr) {
+Graph::Graph() : L(0), C(0) {
     pixels = new Pixel[L * C];
+    S->setIntensity(255);
+    T->setIntensity(0);
 }
 
 Graph::Graph(std::string filename) {
@@ -36,11 +38,26 @@ Graph::Graph(std::string filename) {
         pixels[i].setIntensity(temp);
     }
     in.close();
+    S->setIntensity(255);
+    T->setIntensity(0);
 }
-
 
 Graph::~Graph() {
     delete[] pixels;
+}
+
+void Graph::initializeGraph() {
+    for (int i = 0; i < L * C; i++) {
+        pixels[i].setState(0);
+
+        // Set the flow to 0 for all directions
+        for (int dir = 0; dir < 4; dir++) {
+            pixels[i].flow[dir] = 0;
+        }
+
+        // Set capacity using nearCap for arcs towards neighbors (North, South, East, West)
+        nearCap(i);
+    }
 }
 
 int Graph::pixel(const int l, const int c){
@@ -99,6 +116,32 @@ int Graph::near(const int l, const int c, int lines[4], int columns[4]){
     return n;
 }
 
+void Graph::nearCap(const int i) {
+    int l = line(i);
+    int c = column(i);
+
+    int lines[4];
+    int columns[4];
+    int n = near(l, c, lines, columns);
+
+    for (int v = 0; v < n; ++v) {
+        int neighborIndex = index(lines[v], columns[v]);
+        
+        // Calculating the capacity array following the formula
+        double intensityDifference = pixels[i].getIntensity() - pixels[neighborIndex].getIntensity();
+        double capacityValue = H* std::exp(-(intensityDifference * intensityDifference) / (2 * SIGMA * SIGMA));
+
+        pixels[i].capacity[v] = capacityValue;
+    }
+
+     // Initializing the source and sink capacity following the formulas
+    double sourceCapacity = -ALPHA * log((255.0 - pixels[i].getIntensity()) / 255.0);
+    double sinkCapacity = -ALPHA * log(pixels[i].getIntensity() / 255.0);
+
+    pixels[i].setSourceCapacity(sourceCapacity);
+    pixels[i].setSinkCapacity(sinkCapacity);
+}
+
 void Graph::depthFT(const int l,const int c){
     int i = index(l, c);
     if (pixels[i].getState() != 0) return;
@@ -148,6 +191,44 @@ void Graph::breadthFT(const int startL, const int startC) {
     }
 }
 
+bool Graph::findAugmentedPath() {
+    // Initialize the graph, assuming the initializeGraph function exists
+    initializeGraph();
+
+    // Start BFS from source (S)
+    std::queue<Pixel*> bfsQueue;
+    bfsQueue.push(S);
+
+    while (!bfsQueue.empty()) {
+        Pixel* currentPixel = bfsQueue.front();
+        bfsQueue.pop();
+
+        // Check if the current pixel is the sink (T)
+        if (currentPixel == T) {
+            // Augmented path found, reconstruct the path
+            //reconstructAugmentedPath();
+            return true;
+        }
+
+        // Explore neighbors (pixels with residual capacity)
+        int lines[4];
+        int columns[4];
+        int n = near(0,0, lines, columns);
+
+        for (int v = 0; v < n; ++v) {
+            int neighborIndex = index(lines[v], columns[v]);
+            Pixel* neighbor = &pixels[neighborIndex];
+
+            if (neighbor->getState() == 0 && currentPixel->capacity[v] - neighbor->capacity[v] > 0) {
+                neighbor->setState(1);
+                bfsQueue.push(neighbor);
+            }
+        }
+    }
+
+    // No augmented path found
+    return false;
+}
 
 void Graph::printGraph(const int l,const int c){
     int i = index(l, c);
